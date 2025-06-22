@@ -1,7 +1,7 @@
 # Diffusion model in web browser
 
 
-[Online Demo! Run it in your web browser ](https://yhh1008.github.io/diffusion_avatar/)
+[Online Demo! Run it in your web browser ](https://yhh1008.github.io/diffusion-avatar/)
 
 -------------------
 
