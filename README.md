@@ -1,7 +1,7 @@
 # Diffusion model in web browser
 
 
-[Online Demo! Run it in your web browser ](https://wangjia184.github.io/diffusion_model/)
+[Online Demo! Run it in your web browser ](https://yhh1008.github.io/diffusion_avatar/)
 
 * 第一集: https://www.bilibili.com/video/BV1tz4y1h7q1 | 正态分布 | 基本设定 | 公式推导 |
 * 第二集: https://www.bilibili.com/video/BV1xQ4y1w7ex | 神经网络 | 概率空间 | 边缘概率 | 各向同性高斯分布 |
