@@ -1,6 +1,10 @@
 # Diffusion model in web browser
 
+
+[Online Demo! Run it in your web browser ](https://yhh1008.github.io/diffusion_avatar/)
+
 -------------------
+
 
 
 ## 1. DDPM Introduction
