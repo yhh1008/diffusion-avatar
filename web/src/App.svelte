@@ -62,7 +62,7 @@
 <Modal isOpen={step === 0} backdrop="static" keyboard={false}>
   <ModalHeader>Welcome!</ModalHeader>
   <ModalBody class="text-center">
-    <p>Do you confirm to enter the Magical Girls Generator?</p>
+    <p>Do you confirm to enter「The Magical Girls Generator」?</p>
   </ModalBody>
   <ModalFooter>
     <Button class="btn-pink" on:click={handleConfirmEnter}>
@@ -88,12 +88,18 @@
     <img
       src="welcome.png"
       alt="欢迎图"
-      style="width: 100%; border-radius: 8px; margin-top: 1rem;"
+      style="
+        display: block;
+        width: 100%;
+        max-width: 400px;
+        margin: 1rem auto 0;
+        border-radius: 8px;
+      "
     />
   </ModalBody>
   <ModalFooter>
     <Button class="btn-pink" on:click={handleIntroduce}>
-      Okay…?
+      Okay…? (So, all genders → girls…?)
     </Button>
   </ModalFooter>
 </Modal>
@@ -102,16 +108,21 @@
 <Modal isOpen={step === 2} size="lg" backdrop="static" keyboard={false}>
   <ModalHeader>Other Things You Need to Know</ModalHeader>
   <ModalBody>
-    <p>You can drag the progress bar to control the speed at which magical girls are generated.</p>
     <p>
-      However, if you see an unusual face, please don’t mind it. That’s just how
-      magical girls are.
+      You can drag the progress bar to control the speed at which magical girls are generated.
+      However, if you see an unusual face, please don’t mind it. That’s just how magical girls are.
     </p>
     <p>Let’s work together to prevent the heat death of the universe!</p>
     <img
       src="welcome.png"
       alt="欢迎图"
-      style="width: 100%; border-radius: 8px; margin-top: 1rem;"
+      style="
+        display: block;
+        width: 100%;
+        max-width: 400px;
+        margin: 1rem auto 0;
+        border-radius: 8px;
+      "
     />
   </ModalBody>
   <ModalFooter>
