@@ -45,7 +45,7 @@
 <!-- 直接从 public/bgm.mp3 引用，无需 import -->
 <audio
   bind:this={audioEl}
-  src="/bgm.mp3"
+  src="bgm.mp3"
   autoplay
   loop
   style="display:none;"
