@@ -204,4 +204,19 @@
         #e0e0e0 var(--value-percent, 0%)
     ) !important;
     }
+
+    /* btn-pink 基础配色 */
+    :global(.btn-pink) {
+      --bs-btn-bg: pink;               /* 背景 */
+      --bs-btn-border-color: pink;     /* 边框 */
+      --bs-btn-color: white;           /* 文字 */
+    }
+    /* 悬停／激活时用稍深一点的粉色 */
+    :global(.btn-pink:hover),
+    :global(.btn-pink:focus),
+    :global(.btn-pink:active) {
+      --bs-btn-bg: #ff85a2;
+      --bs-btn-border-color: #ff85a2;
+      --bs-btn-color: white;
+    }
 </style>
