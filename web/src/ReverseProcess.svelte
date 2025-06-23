@@ -129,14 +129,14 @@
     }
 
     .generated {
-        width: 228px;
-        height: 228px;
+        width: 128px;
+        height: 128px;
         border: solid 1px #666;
     }
 
     .avatar {
-        width: 228px;
-        height: 228px;
+        width: 128px;
+        height: 128px;
         border: solid 1px #666;
     }
         
