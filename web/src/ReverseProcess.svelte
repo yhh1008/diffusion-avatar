@@ -65,8 +65,11 @@
     {#if loadingPercentage < 100}
         <div>
             <div class="text-center">Loading ...</div>
-            <Progress animated color="success" value={loadingPercentage}
-                >{loadingPercentage}%</Progress
+            <Progress
+                animated
+                value={loadingPercentage}
+                style="--bs-progress-bg: pink;"
+                >{loadingPercentage}%</Progress>
             >
         </div>
     {:else}
@@ -125,7 +128,7 @@
 <style>
     .progress_bar {
         height: 13px;
-        background-color: pink;
+        background-color: pink !important;
     }
 
     .generated {
@@ -139,9 +142,16 @@
         height: 128px;
         border: solid 1px #666;
     }
-        
-    input[type="range"] {
-        accent-color:pink;
-    }
 
+    input[type="range"] {
+        accent-color: pink;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        background: pink;
+        border: none;
+    }
+    input[type="range"]::-moz-range-thumb {
+        background: pink;
+        border: none;
+    }
 </style>
