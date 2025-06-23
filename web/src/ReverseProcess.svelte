@@ -129,11 +129,13 @@
 </div>
 
 <style>
+    /* 小进度条底色 */
     .progress_bar {
         height: 13px;
         background-color: pink !important;
     }
 
+    /* 生成图片和 canvas */
     .generated {
         width: 128px;
         height: 128px;
