@@ -15,11 +15,41 @@
   let percentage = 0;
   let images = [];
   let variables = null;
+
+  // audio 元素的引用
+  let audioEl;
+
+  onMount(() => {
+    if (audioEl) {
+      audioEl
+        .play()
+        .catch(() => {
+          // 如果被浏览器拦截，就等用户下一次点击页面时再播放
+          const tryPlay = () => {
+            audioEl.play();
+            window.removeEventListener("click", tryPlay);
+          };
+          window.addEventListener("click", tryPlay);
+        });
+    }
+  });
 </script>
 
 <svelte:head>
-  <link rel="stylesheet" href="./bootstrap/dist/css/bootstrap.min.css" />
+  <link
+    rel="stylesheet"
+    href="./bootstrap/dist/css/bootstrap.min.css"
+  />
 </svelte:head>
+
+<!-- 直接从 public/bgm.mp3 引用，无需 import -->
+<audio
+  bind:this={audioEl}
+  src="/bgm.mp3"
+  autoplay
+  loop
+  style="display:none;"
+></audio>
 
 <style>
   :global(.tab-pane) {
@@ -35,5 +65,3 @@
     <ReverseProcess />
   </TabPane>
 </TabContent>
-
-
