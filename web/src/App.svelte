@@ -55,7 +55,7 @@
     <p>确认进入「Kawaii Gal Avatar Generator」？</p>
   </ModalBody>
   <ModalFooter>
-    <Button color="primary" on:click={handleConfirmEnter}>
+    <Button class="btn-pink" on:click={handleConfirmEnter}>
       确认进入
     </Button>
   </ModalFooter>
@@ -74,7 +74,7 @@
     />
   </ModalBody>
   <ModalFooter>
-    <Button color="primary" on:click={handleAcknowledge}>
+    <Button class="btn-pink" on:click={handleAcknowledge}>
       我已知晓
     </Button>
   </ModalFooter>
