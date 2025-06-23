@@ -72,10 +72,6 @@
           {loadingPercentage}%
         </Progress>
       </div>
-      <i
-        class="bi bi-info-circle"
-        title="步数越大速度越快，但可能会牺牲一点图像质量"
-      ></i>
     </div>
   {:else}
     <!-- 加速滑条 -->

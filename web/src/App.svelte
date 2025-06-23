@@ -11,81 +11,121 @@
   } from "sveltestrap";
   import ReverseProcess from "./ReverseProcess.svelte";
 
-  // step 0/1/2 三个状态
+  // 三个 step：0–显示第一个确认框，1–功能介绍，2–其他说明，3–进入主界面
   let step = 0;
 
-  // 绑定 <audio> 元素
+  // 绑定 <audio> 用于点击后播放
   let audioEl;
 
   function handleConfirmEnter() {
-    // 用户第一次点击「确认进入」
+    // 第一个模态框→第二个
     step = 1;
-    // 试图马上播放 bgm
-    audioEl.play().catch(() => {
-      // 如果因为浏览器策略被禁止自动播放就忽略
-    });
+    audioEl.play().catch(() => {});
   }
 
-  function handleAcknowledge() {
-    // 用户点击「我已知晓」
+  function handleIntroduce() {
+    // 第二个模态框→第三个
     step = 2;
+  }
+
+  function handleEnterMain() {
+    // 第三个模态框→正式界面
+    step = 3;
   }
 </script>
 
 <svelte:head>
-  <link
-    rel="stylesheet"
-    href="./bootstrap/dist/css/bootstrap.min.css"
-  />
+  <link rel="stylesheet" href="./bootstrap/dist/css/bootstrap.min.css" />
 </svelte:head>
 
-<!-- 1. bgm 元素，隐藏控制条 -->
-<audio
-  bind:this={audioEl}
-  src="bgm.mp3"
-  loop
-  style="display:none;"
-></audio>
+<style>
+  /* 粉色按钮 */
+  :global(.btn-pink) {
+    background-color: pink;
+    border-color: pink;
+    color: white;
+  }
+  /* 隐藏原生 audio 控制条 */
+  audio {
+    display: none;
+  }
+  /* 主界面的半透明背景 */
+  :global(.tab-pane) {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+</style>
 
+<!-- 自动循环播放的 BGM，点击后才会触发 -->
+<audio bind:this={audioEl} src="bgm.mp3" loop></audio>
 
 <!-- 第一个弹窗：确认进入？ -->
 <Modal isOpen={step === 0} backdrop="static" keyboard={false}>
-  <ModalHeader>欢迎</ModalHeader>
+  <ModalHeader>Welcome!</ModalHeader>
   <ModalBody class="text-center">
-    <p>确认进入「Kawaii Gal Avatar Generator」？</p>
+    <p>Do you confirm to enter the Magical Girls Generator?</p>
   </ModalBody>
   <ModalFooter>
     <Button class="btn-pink" on:click={handleConfirmEnter}>
-      确认进入
+      Yes!
     </Button>
   </ModalFooter>
 </Modal>
 
 <!-- 第二个弹窗：功能介绍 + 图片 -->
 <Modal isOpen={step === 1} size="lg" backdrop="static" keyboard={false}>
-  <ModalHeader>使用说明</ModalHeader>
+  <ModalHeader>Hello, New Incubator!</ModalHeader>
   <ModalBody>
-    <p>1. 这是一个用浏览器 Diffusion 模型生成可爱头像的演示。</p>
-    <p>2. 你可以拖动下方「加速等级」来控制采样步数。</p>
+    <p>
+      As you know, with the development of cosmic civilization, we no longer need
+      to sign contracts verbally. We simply select humans at random and turn
+      them into magical girls. It's that simple!
+    </p>
+    <p>
+      The moment you enter the website, our selection process begins. You will
+      see avatars appearing in the window, which signifies that the magical
+      girls have successfully registered.
+    </p>
     <img
       src="welcome.png"
       alt="欢迎图"
-      style="width: 100%; border-radius: 8px; margin-top:1rem;"
+      style="width: 100%; border-radius: 8px; margin-top: 1rem;"
     />
   </ModalBody>
   <ModalFooter>
-    <Button class="btn-pink" on:click={handleAcknowledge}>
-      我已知晓
+    <Button class="btn-pink" on:click={handleIntroduce}>
+      Okay…?
     </Button>
   </ModalFooter>
 </Modal>
 
+<!-- 第三个弹窗：其他注意事项 -->
+<Modal isOpen={step === 2} size="lg" backdrop="static" keyboard={false}>
+  <ModalHeader>Other Things You Need to Know</ModalHeader>
+  <ModalBody>
+    <p>You can drag the progress bar to control the speed at which magical girls are generated.</p>
+    <p>
+      However, if you see an unusual face, please don’t mind it. That’s just how
+      magical girls are.
+    </p>
+    <p>Let’s work together to prevent the heat death of the universe!</p>
+    <img
+      src="welcome.png"
+      alt="欢迎图"
+      style="width: 100%; border-radius: 8px; margin-top: 1rem;"
+    />
+  </ModalBody>
+  <ModalFooter>
+    <Button class="btn-pink" on:click={handleEnterMain}>
+      Glad to help!
+    </Button>
+  </ModalFooter>
+</Modal>
 
-{#if step === 2}
-  <!-- 正式主界面 -->
+<!-- step === 3 时渲染真正的主界面 -->
+{#if step === 3}
   <TabContent class="w-100 mt-3">
     <TabPane tabId="backward" active>
-      <span slot="tab">🎨 Kawaii Gal Avatar Generator！</span>
+      <span slot="tab">🪄 Magical Girls Generator ✨</span>
       <ReverseProcess />
     </TabPane>
   </TabContent>
