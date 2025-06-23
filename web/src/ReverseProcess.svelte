@@ -97,6 +97,7 @@
                     step="1"
                     id="acc"
                     bind:value={skipSteps}
+                    style="--value-percent: {Math.round((skipSteps/20)*100)}%;"
                 />
             </div>
             <div class="col-sm-2 text-start">
@@ -156,15 +157,60 @@
         border: solid 1px #666;
     }
 
-    input[type="range"] {
-        accent-color: pink;
+    .progress_bar {
+        height: 13px;
+        background-color: pink !important;
     }
-    input[type="range"]::-webkit-slider-thumb {
-        background: pink;
-        border: none;
+
+    /* ****************************************** */
+    /* —— 全局覆盖弹性滑条 —— */
+    /* 1. 透明化原生 track，只留下我们自己的 */
+    :global(input[type="range"]) {
+        -webkit-appearance: none;
+        width: 100%;
+        background: transparent;
+        height: 8px;
+        margin: 0;
     }
-    input[type="range"]::-moz-range-thumb {
-        background: pink;
-        border: none;
+
+    /* 2. 滑块本体（Thumb） */
+    :global(input[type="range"]::-webkit-slider-thumb) {
+        -webkit-appearance: none;
+        width: 20px; height: 20px;
+        border-radius: 50%;
+        background: pink !important;
+        margin-top: -6px;
+        cursor: pointer;
+    }
+    :global(input[type="range"]::-moz-range-thumb) {
+        width: 20px; height: 20px;
+        border-radius: 50%;
+        background: pink !important;
+        cursor: pointer;
+    }
+
+    /* 3. 整条轨道的灰色底色 */
+    :global(input[type="range"]::-webkit-slider-runnable-track),
+    :global(input[type="range"]::-moz-range-track) {
+        width: 100%;
+        height: 8px;
+        background: #e0e0e0 !important;
+        border-radius: 4px;
+    }
+
+    /* 4. Firefox 原生已填充部分 */
+    :global(input[type="range"]::-moz-range-progress) {
+        background: pink !important;
+        height: 8px;
+        border-radius: 4px 0 0 4px;
+    }
+
+    /* 5. WebKit 用渐变 hack 出已填充部分 */
+    :global(input[type="range"]::-webkit-slider-runnable-track) {
+    background: linear-gradient(
+        to right,
+        pink var(--value-percent, 0%),
+        #e0e0e0 var(--value-percent, 0%)
+    ) !important;
     }
 </style>
