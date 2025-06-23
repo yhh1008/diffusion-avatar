@@ -1,142 +1,131 @@
 <script>
-    import { Table, Progress, Icon } from "sveltestrap";
-    import { onMount } from "svelte";
-    import reverse_jpg from "./assets/reverse.jpg";
-    import ddim_png from "./assets/ddim.png";
+  import { Progress } from "sveltestrap";
+  import { onMount } from "svelte";
 
-    let loadingPercentage = 0;
-    let canvas;
-    let percentage = 0;
-    let images = [];
-    let variables = null;
-    let skipSteps = 0;
+  let loadingPercentage = 0;
+  let canvas;
+  let percentage = 0;
+  let images = [];
+  let variables = null;
+  let skipSteps = 0;
 
-    const worker = new Worker(
-        "./64x64_cosin_300/worker.js?_" + new Date().getTime(),
-    );
+  // 计算 slider 的填充百分比（供 CSS 渐变用）
+  $: skipPercent = Math.round((skipSteps / 20) * 100) + "%";
 
-    $: skipSteps,
-        (() => {
-            worker.postMessage({ skipSteps: skipSteps });
-        })();
+  // 更易读的模式说明
+  $: modeLabel =
+    skipSteps === 0
+      ? "标准采样 (DDPM)"
+      : `加速采样 (DDIM，跳过 ${skipSteps} 步)`;
 
-    onMount(() => {
-        const offscreen = canvas.transferControlToOffscreen();
-        worker.postMessage({ offscreen: offscreen }, [offscreen]);
-        worker.onmessage = async (evt) => {
-            const data = evt.data;
-            switch (data.type) {
-                case "image": {
-                    percentage = data.percent;
-                    if (data.imageBlob) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                            images.push(reader.result);
-                            images = images;
-                        };
-                        reader.readAsDataURL(data.imageBlob);
-                    }
-                    break;
-                }
-                case "ready": {
-                    loadingPercentage = 100;
-                    variables = data.parameters;
-                    break;
-                }
-                case "progress": {
-                    loadingPercentage = Math.floor(data.progress * 100);
-                    break;
-                }
-                case "error": {
-                    alert(data.message);
-                    self.location = self.location;
-                    break;
-                }
-                default: {
-                    console.log(data);
-                    break;
-                }
-            }
-        };
-    });
+  // 使用原来的 Worker 路径
+  const worker = new Worker(
+    "./64x64_cosin_300/worker.js?_" + new Date().getTime()
+  );
+
+  // 每次 skipSteps 变动就通知 worker
+  $: worker.postMessage({ skipSteps });
+
+  onMount(() => {
+    // 把 canvas 交给 worker 绘制
+    const offscreen = canvas.transferControlToOffscreen();
+    worker.postMessage({ offscreen }, [offscreen]);
+
+    worker.onmessage = (evt) => {
+      const data = evt.data;
+      switch (data.type) {
+        case "image":
+          percentage = data.percent;
+          if (data.imageBlob) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              images = [...images, reader.result];
+            };
+            reader.readAsDataURL(data.imageBlob);
+          }
+          break;
+        case "ready":
+          loadingPercentage = 100;
+          variables = data.parameters;
+          break;
+        case "progress":
+          loadingPercentage = Math.floor(data.progress * 100);
+          break;
+        case "error":
+          alert(data.message);
+          location.reload();
+          break;
+      }
+    };
+  });
 </script>
 
-<div class="border border-top-0 p-5">
-    {#if loadingPercentage < 100}
-        <div>
-            <div class="text-center">Loading ...</div>
-            <Progress
-                animated
-                value={loadingPercentage}
-                style="
-                --bs-progress-bar-striped-bg: 
-                    linear-gradient(
-                    45deg,
-                    rgba(255,192,203,0.3) 25%,
-                    transparent 25%,
-                    transparent 50%,
-                    rgba(255,192,203,0.3) 50%,
-                    rgba(255,192,203,0.3) 75%,
-                    transparent 75%,
-                    transparent
-                    );
-                "
-            >
-    {loadingPercentage}%
-  </Progress>
-        </div>
-    {:else}
-        <div class="mb-3 row">
-            <label for="acc" class="col-sm-2 text-end">Acceleration :</label>
-            <div class="col-sm-8">
-                <input
-                    type="range"
-                    class="form-range"
-                    min="0"
-                    max="20"
-                    step="1"
-                    id="acc"
-                    bind:value={skipSteps}
-                    style="--value-percent: {Math.round((skipSteps/20)*100)}%;"
-                />
-            </div>
-            <div class="col-sm-2 text-start">
-                <small>
-                    <strong
-                        >{skipSteps <= 0
-                            ? "DDPM"
-                            : "DDIM; m=n-" + skipSteps.toString()}</strong
-                    >
-                </small>
-            </div>
-        </div>
-    {/if}
-    <hr />
-    <div class="container mt-2">
-        <div class="row">
-            {#each images as img}
-                <div class="col">
-                    <img src={img} class="generated mb-2" alt="" />
-                </div>
-            {/each}
-            <div class="col">
-                <div class="d-flex justify-content-center">
-                    <div>
-                        <canvas
-                            class="d-flex avatar"
-                            bind:this={canvas}
-                            width="128"
-                            height="128"
-                        />
-                        <div
-                            class="d-flex progress_bar"
-                            style="width:{percentage * 100}%"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
+<div
+  class="border-top-0 p-5 rounded shadow-sm"
+  style="background-color: rgba(255,255,255,0.8);"
+>
+  {#if loadingPercentage < 100}
+    <!-- 加载中 -->
+    <div class="d-flex align-items-center mb-3">
+      <div class="flex-grow-1 me-3">
+        <Progress animated value={loadingPercentage} color="pink">
+          {loadingPercentage}%
+        </Progress>
+      </div>
+      <i
+        class="bi bi-info-circle"
+        title="步数越大速度越快，但可能会牺牲一点图像质量"
+      ></i>
     </div>
+  {:else}
+    <!-- 加速滑条 -->
+    <div class="mb-3 row align-items-center">
+      <label for="acc" class="col-sm-2 text-end">加速等级：</label>
+      <div class="col-sm-8">
+        <input
+          id="acc"
+          type="range"
+          class="form-range"
+          min="0"
+          max="20"
+          bind:value={skipSteps}
+          style="--value-percent: {skipPercent}"
+        />
+      </div>
+      <div class="col-sm-2 text-start">
+        <small><strong>{modeLabel}</strong></small>
+      </div>
+    </div>
+  {/if}
+
+  <hr />
+
+  <!-- 结果输出区 -->
+  <div class="container mt-2">
+    <div class="row">
+      {#each images as img}
+        <div class="col">
+          <img src={img} class="generated mb-2" alt="avatar" />
+        </div>
+      {/each}
+      <div class="col">
+        <div class="d-flex justify-content-center">
+          <div>
+            <canvas
+              bind:this={canvas}
+              class="avatar mb-2"
+              width="128"
+              height="128"
+            />
+            <div
+              class="progress_bar"
+              style="width: {percentage * 100}%"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <style>
