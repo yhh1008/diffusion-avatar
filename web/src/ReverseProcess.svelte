@@ -68,9 +68,22 @@
             <Progress
                 animated
                 value={loadingPercentage}
-                style="--bs-progress-bg: pink;"
-                >{loadingPercentage}%</Progress>
+                style="
+                --bs-progress-bar-striped-bg: 
+                    linear-gradient(
+                    45deg,
+                    rgba(255,192,203,0.3) 25%,
+                    transparent 25%,
+                    transparent 50%,
+                    rgba(255,192,203,0.3) 50%,
+                    rgba(255,192,203,0.3) 75%,
+                    transparent 75%,
+                    transparent
+                    );
+                "
             >
+    {loadingPercentage}%
+  </Progress>
         </div>
     {:else}
         <div class="mb-3 row">
