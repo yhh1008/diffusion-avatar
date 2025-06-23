@@ -76,7 +76,7 @@
   {:else}
     <!-- 加速滑条 -->
     <div class="mb-3 row align-items-center">
-      <label for="acc" class="col-sm-2 text-end">加速等级：</label>
+      <label for="acc" class="col-sm-2 text-end">Speedup Level：</label>
       <div class="col-sm-8">
         <input
           id="acc"
