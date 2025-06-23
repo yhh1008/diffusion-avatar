@@ -15,8 +15,8 @@
   // 更易读的模式说明
   $: modeLabel =
     skipSteps === 0
-      ? "标准采样 (DDPM)"
-      : `加速采样 (DDIM，跳过 ${skipSteps} 步)`;
+      ? "Standard Sampling (DDPM)"
+      : `Accelerated Sampling (DDIM, skipping ${skipSteps} steps)`;
 
   // 使用原来的 Worker 路径
   const worker = new Worker(
